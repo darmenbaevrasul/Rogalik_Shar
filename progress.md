@@ -10,3 +10,4 @@ Original prompt: Implement the approved Sigil Siege plan by replacing the Vite s
 - Browser validation covered: title screen, movement, combat, spawn telegraphs, blessing draft, long survival run to game over, and restart back into wave 1.
 - The bundled web-game Playwright client could not run because its environment lacked the `playwright` package, so validation used the built-in Playwright MCP browser instead.
 - User-facing game text was localized to Russian: HUD, overlays, dynamic wave/status messages, and blessing names/descriptions.
+- Added repository polish: Russian README, in-repo screenshots, and a GitHub Pages workflow plus Vite base config for repo hosting.
