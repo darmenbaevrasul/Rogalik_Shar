@@ -1,0 +1,517 @@
+:root {
+  color: #e8fbf6;
+  background:
+    radial-gradient(circle at top, rgba(29, 69, 83, 0.55), transparent 46%),
+    radial-gradient(circle at bottom right, rgba(206, 136, 55, 0.18), transparent 35%),
+    linear-gradient(180deg, #03060a 0%, #081118 40%, #05090d 100%);
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.game-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.top-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.hud-card {
+  position: relative;
+  overflow: hidden;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(124, 242, 227, 0.2);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(13, 28, 36, 0.95), rgba(8, 18, 24, 0.82)),
+    radial-gradient(circle at top right, rgba(124, 242, 227, 0.14), transparent 52%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.hud-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(248, 183, 94, 0.08), transparent 45%);
+  pointer-events: none;
+}
+
+.hud-health-card {
+  min-width: 0;
+}
+
+.hud-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: rgba(196, 242, 233, 0.72);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hud-value {
+  display: block;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.health-bar {
+  margin-top: 0.7rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.health-bar__fill {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f46d5e 0%, #f8b75e 62%, #ffe38a 100%);
+  box-shadow: 0 0 18px rgba(244, 109, 94, 0.45);
+  transition: width 120ms ease-out;
+}
+
+.stage-shell {
+  display: grid;
+  place-items: center;
+}
+
+.stage-frame {
+  position: relative;
+  width: min(1200px, 100%);
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(124, 242, 227, 0.25);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background:
+    linear-gradient(180deg, rgba(6, 12, 18, 0.96), rgba(3, 7, 11, 0.98)),
+    radial-gradient(circle at center, rgba(124, 242, 227, 0.12), transparent 48%);
+}
+
+.stage-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(248, 183, 94, 0.14);
+  pointer-events: none;
+}
+
+.game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stage-corner {
+  position: absolute;
+  z-index: 3;
+  max-width: min(32%, 360px);
+  display: grid;
+  gap: 0.7rem;
+  pointer-events: none;
+}
+
+.stage-corner--left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.stage-corner--right {
+  top: 1rem;
+  right: 1rem;
+  justify-items: end;
+}
+
+.chip {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(124, 242, 227, 0.24);
+  background: rgba(7, 16, 22, 0.72);
+  color: #dffef7;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.chip--accent {
+  box-shadow: 0 0 18px rgba(124, 242, 227, 0.15);
+}
+
+.status-stack {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.status-item {
+  padding: 0.75rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(124, 242, 227, 0.12);
+  background: rgba(7, 15, 20, 0.64);
+  backdrop-filter: blur(8px);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.status-item--muted {
+  color: rgba(214, 244, 238, 0.74);
+}
+
+.blessing-strip {
+  min-height: 3rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid rgba(248, 183, 94, 0.18);
+  background: rgba(11, 20, 16, 0.68);
+  color: rgba(249, 236, 203, 0.92);
+  font-size: 0.86rem;
+  line-height: 1.4;
+  text-align: right;
+  backdrop-filter: blur(8px);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at center, rgba(6, 14, 19, 0.2), rgba(4, 9, 13, 0.84)),
+    linear-gradient(180deg, rgba(4, 8, 12, 0.6), rgba(4, 8, 12, 0.92));
+  backdrop-filter: blur(7px);
+}
+
+.overlay--visible {
+  display: flex;
+}
+
+.overlay-card {
+  width: min(100%, 540px);
+  padding: 1.9rem 2rem;
+  border-radius: 26px;
+  border: 1px solid rgba(124, 242, 227, 0.22);
+  background:
+    linear-gradient(180deg, rgba(7, 17, 24, 0.96), rgba(9, 18, 25, 0.84)),
+    radial-gradient(circle at top, rgba(124, 242, 227, 0.12), transparent 42%);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.overlay-card--wide {
+  width: min(100%, 900px);
+}
+
+.eyebrow {
+  margin-bottom: 0.75rem;
+  color: rgba(124, 242, 227, 0.8);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.overlay h1,
+.overlay h2 {
+  margin: 0;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(2.5rem, 5vw, 4.3rem);
+  line-height: 0.94;
+}
+
+.overlay h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.overlay-copy {
+  margin: 1rem auto 0;
+  max-width: 42rem;
+  color: rgba(223, 254, 247, 0.82);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin: 1.35rem 0 1.2rem;
+}
+
+.feature-pill {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(124, 242, 227, 0.08);
+  border: 1px solid rgba(124, 242, 227, 0.2);
+  color: rgba(225, 251, 245, 0.95);
+  font-size: 0.88rem;
+}
+
+.controls-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.35rem 0 1.5rem;
+}
+
+.controls-panel div {
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(248, 183, 94, 0.18);
+  background: rgba(16, 25, 20, 0.54);
+}
+
+.controls-panel span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: rgba(248, 223, 184, 0.82);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.controls-panel strong {
+  font-size: 1.05rem;
+}
+
+.action-button {
+  min-width: 220px;
+  padding: 0.95rem 1.3rem;
+  border: 1px solid rgba(124, 242, 227, 0.28);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, #0f675f 0%, #0c4848 100%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);
+  color: #ebfff9;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 15px 28px rgba(6, 37, 40, 0.42);
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    filter 120ms ease;
+}
+
+.action-button:hover,
+.action-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(236, 255, 250, 0.5);
+  filter: brightness(1.06);
+  outline: none;
+}
+
+.action-button--secondary {
+  background:
+    linear-gradient(180deg, #6d4620 0%, #472a13 100%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);
+}
+
+.overlay-foot {
+  margin-top: 1rem;
+  color: rgba(223, 254, 247, 0.76);
+  font-size: 0.95rem;
+}
+
+.blessing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.blessing-card {
+  position: relative;
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.25rem 1rem 1rem;
+  min-height: 210px;
+  text-align: left;
+  border-radius: 20px;
+  border: 1px solid rgba(124, 242, 227, 0.18);
+  background:
+    linear-gradient(180deg, rgba(12, 25, 32, 0.94), rgba(7, 14, 18, 0.88)),
+    radial-gradient(circle at top, rgba(124, 242, 227, 0.12), transparent 52%);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.blessing-card:hover,
+.blessing-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(248, 183, 94, 0.34);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.28);
+  outline: none;
+}
+
+.blessing-index {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(248, 183, 94, 0.14);
+  color: #f8d7ab;
+  font-weight: 700;
+}
+
+.blessing-card strong {
+  display: block;
+  padding-right: 2rem;
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.28rem;
+}
+
+.blessing-card span:last-child {
+  color: rgba(225, 251, 245, 0.84);
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .game-shell {
+    padding: 0.8rem;
+  }
+
+  .top-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage-corner {
+    max-width: calc(50% - 1.25rem);
+  }
+
+  .blessing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blessing-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .game-shell {
+    gap: 0.75rem;
+    padding: 0.55rem;
+  }
+
+  .top-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+  }
+
+  .hud-card {
+    padding: 0.8rem 0.85rem;
+  }
+
+  .hud-value {
+    font-size: 1.08rem;
+  }
+
+  .stage-frame {
+    border-radius: 22px;
+  }
+
+  .stage-corner {
+    inset: auto 0 0 0;
+    max-width: none;
+    padding: 0.75rem;
+  }
+
+  .stage-corner--left,
+  .stage-corner--right {
+    right: 0;
+    left: 0;
+    top: auto;
+  }
+
+  .stage-corner--left {
+    bottom: 0;
+  }
+
+  .stage-corner--right {
+    display: none;
+  }
+
+  .status-stack {
+    gap: 0.5rem;
+  }
+
+  .status-item,
+  .blessing-strip {
+    font-size: 0.8rem;
+  }
+
+  .controls-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .overlay {
+    padding: 0.8rem;
+  }
+
+  .overlay-card {
+    padding: 1.35rem 1.1rem;
+    border-radius: 22px;
+  }
+
+  .feature-grid {
+    margin-top: 1rem;
+  }
+}
