@@ -2,6 +2,41 @@
 
 Небольшой, но отполированный 2D roguelike-survivor на ванильном JavaScript и Vite. Игрок удерживает рунный зал, переживает нарастающие волны врагов, собирает осколки и выбирает благословения между волнами.
 
+## Быстрый запуск
+
+Если хочешь просто открыть игру:
+
+- онлайн-версия: [https://darmenbaevrasul.github.io/Rogalik_Shar/](https://darmenbaevrasul.github.io/Rogalik_Shar/)
+
+Если хочешь запустить проект локально на компьютере:
+
+1. Установи Node.js.
+2. Открой терминал в папке проекта.
+3. Выполни команды:
+
+```bash
+npm install
+npm run dev
+```
+
+4. Открой в браузере адрес, который покажет Vite.
+
+Обычно это:
+
+`http://localhost:5173/`
+
+## Как собрать production-версию
+
+```bash
+npm run build
+```
+
+Если хочешь посмотреть production-версию локально:
+
+```bash
+npm run preview
+```
+
 ## Что внутри
 
 - top-down арена с отзывчивым движением
@@ -32,30 +67,11 @@
 
 Цель проста: продержаться как можно дольше, закрывать волны, собирать осколки и собирать сильную комбинацию благословений.
 
-## Локальный запуск
-
-```bash
-npm install
-npm run dev
-```
-
-После запуска открыть адрес Vite, обычно `http://localhost:5173/`.
-
-## Production build
-
-```bash
-npm run build
-```
-
 ## Деплой на GitHub Pages
 
 В репозитории уже добавлен workflow для GitHub Pages. После пуша в `main` GitHub Actions соберёт Vite-проект и опубликует его.
 
-Ожидаемый адрес сайта:
-
-[https://darmenbaevrasul.github.io/Rogalik_Shar/](https://darmenbaevrasul.github.io/Rogalik_Shar/)
-
-Если GitHub попросит подтверждение Pages:
+Если GitHub попросит подтвердить источник публикации:
 
 1. Открой `Settings` репозитория.
 2. Перейди в `Pages`.
@@ -63,7 +79,7 @@ npm run build
 
 ## Структура
 
-- [src/main.js](./src/main.js) — UI-обвязка, HUD, экраны, browser hooks
+- [src/main.js](./src/main.js) — UI-обвязка, HUD, экраны и browser hooks
 - [src/game/engine.js](./src/game/engine.js) — основная игровая логика
 - [src/game/render.js](./src/game/render.js) — canvas-рендеринг и визуальные эффекты
 - [src/game/blessings.js](./src/game/blessings.js) — благословения и их эффекты
